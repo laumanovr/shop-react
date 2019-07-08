@@ -6,22 +6,24 @@ import { getAllCars, updateInfo } from './store/actions/index';
 class App extends React.Component {
     constructor() {
         super();
+        this.intervalUpdate = '';
         this.state = {cars: []};
     }
 
-    componentWillMount() {
-        this.props.dispatch(getAllCars());
-    }
-
     componentDidMount() {
+        this.props.dispatch(getAllCars());
         document.addEventListener('DOMContentLoaded', () => {
             this.setState({cars: this.props.cars});
         });
 
-        setInterval(() => {
+        this.intervalUpdate = setInterval(() => {
             this.props.dispatch(updateInfo());
             this.setState({cars: this.props.cars});
         }, 3000)
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.intervalUpdate);
     }
 
     render() {
